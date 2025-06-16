@@ -10,11 +10,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+defineProps({
+    roles: Array,
+});
+
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    roles: [],
 });
 </script>
 
@@ -63,7 +68,19 @@ const form = useForm({
                                 {{ form.errors.password_confirmation }}
                             </div>
                         </div>
-
+                        <div class="mb-4">
+                            <label class="mb-1 block">Roles</label>
+                            <div v-for="role in roles" class="flex items-center">
+                                <input
+                                    v-model="form.roles"
+                                    :value="role"
+                                    type="checkbox"
+                                    class="form-checkbox h-4 w-4 rounded border p-2 text-blue-400 focus:ring-2 focus:ring-blue-400"
+                                />
+                                <span class="ml-2 text-gray-800 capitalize">{{ role }}</span>
+                            </div>
+                            <div v-if="form.errors.roles" class="text-sm text-red-500">{{ form.errors.roles }}</div>
+                        </div>
                         <button
                             type="submit"
                             :disabled="form.processing"

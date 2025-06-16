@@ -1,4 +1,5 @@
 <script setup>
+import { can } from '@/lib/can';
 import { router } from '@inertiajs/vue3';
 const props = defineProps(['users']);
 
@@ -42,10 +43,22 @@ const deleteUser = (id) => {
             >
                 <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white">{{ user.name }}</th>
                 <td class="px-6 py-4">{{ user.email }}</td>
-                <td class="px-6 py-4">User</td>
+                <td class="px-6 py-4">
+                    <span
+                        v-for="role in user.roles"
+                        :key="role.id"
+                        class="mr-2 inline-block rounded-full bg-gray-100 px-2 py-1 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                        >{{ role.name }}</span
+                    >
+                </td>
                 <td class="px-6 py-4">01865432121</td>
                 <td class="px-6 py-4">
-                    <a :href="route('users.edit', user.id)" class="p-2 font-medium text-blue-600 hover:underline dark:text-blue-500">Edit</a>
+                    <a
+                        v-if="can('users.update')"
+                        :href="route('users.edit', user.id)"
+                        class="p-2 font-medium text-blue-600 hover:underline dark:text-blue-500"
+                        >Edit</a
+                    >
                     <!-- <Link
                         :href="route('users.destroy', user.id)"
                         method="delete"
@@ -54,7 +67,13 @@ const deleteUser = (id) => {
                         class="p-2 font-medium text-red-600 hover:underline dark:text-blue-500"
                         >Delete</Link
                     > -->
-                    <button @click="deleteUser(user.id)" class="p-2 font-medium text-red-600 hover:underline dark:text-blue-500">Delete</button>
+                    <button
+                        v-if="can('users.delete')"
+                        @click="deleteUser(user.id)"
+                        class="p-2 font-medium text-red-600 hover:underline dark:text-blue-500"
+                    >
+                        Delete
+                    </button>
                 </td>
             </tr>
         </tbody>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,20 +10,23 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// Fallback to empty object if user is undefined
-const page = usePage();
-const user = page.props.user || {};
+const props = defineProps({
+    user: Object,
+    roles: Array,
+    userRoles: Array,
+});
 
 const form = useForm({
-    name: user.name || '',
-    email: user.email || '',
+    name: props.user.name || '',
+    email: props.user.email || '',
     password: '',
     password_confirmation: '',
+    roles: props.userRoles || [],
 });
 </script>
 
 <template>
-    <Head title="Users" />
+    <Head title="Edit Users" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -41,7 +44,10 @@ const form = useForm({
             <div class="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 rounded-xl border md:min-h-min">
                 <!-- start user create form -->
                 <div class="relative overflow-x-auto sm:rounded-lg">
-                    <form @submit.prevent="form.put(route('users.update', user.id))" class="mx-auto my-10 max-w-md rounded-xl bg-white p-6 shadow-md">
+                    <form
+                        @submit.prevent="form.put(route('users.update', props.user.id))"
+                        class="mx-auto my-10 max-w-md rounded-xl bg-white p-6 shadow-md"
+                    >
                         <div class="mb-4">
                             <label class="mb-1 block">Name</label>
                             <input v-model="form.name" type="text" class="w-full rounded border p-2" />
@@ -56,7 +62,7 @@ const form = useForm({
 
                         <div class="mb-4">
                             <label class="mb-1 block">Password</label>
-                            <input v-model="form.password" type="password" class="w-full rounded border p-2" />
+                            <input v-model="form.password" type="password" class="w-full rounded border p-2" autocomplete="off" />
                             <div v-if="form.errors.password" class="text-sm text-red-500">{{ form.errors.password }}</div>
                         </div>
 
@@ -66,6 +72,19 @@ const form = useForm({
                             <div v-if="form.errors.password_confirmation" class="text-sm text-red-500">
                                 {{ form.errors.password_confirmation }}
                             </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="mb-1 block">Roles</label>
+                            <div v-for="role in props.roles" :key="role" class="flex items-center">
+                                <input
+                                    v-model="form.roles"
+                                    :value="role"
+                                    type="checkbox"
+                                    class="form-checkbox h-4 w-4 rounded border p-2 text-blue-400 focus:ring-2 focus:ring-blue-400"
+                                />
+                                <span class="ml-2 text-gray-800 capitalize">{{ role }}</span>
+                            </div>
+                            <div v-if="form.errors.roles" class="text-sm text-red-500">{{ form.errors.roles }}</div>
                         </div>
 
                         <button
