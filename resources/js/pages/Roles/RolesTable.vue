@@ -1,4 +1,5 @@
 <script setup>
+import { can } from '@/lib/can';
 import { router } from '@inertiajs/vue3';
 const props = defineProps(['roles']);
 
@@ -42,16 +43,19 @@ const deleterole = (id) => {
                 </th>
 
                 <td class="px-6 py-4">
-                    <a :href="route('roles.edit', role.id)" class="p-2 font-medium text-blue-600 hover:underline dark:text-blue-500">Edit</a>
-                    <!-- <Link
-                        :href="route('roles.destroy', role.id)"
-                        method="delete"
-                        as="button"
-                        @click="confirmDelete"
+                    <a
+                        v-if="can('roles.update')"
+                        :href="route('roles.edit', role.id)"
+                        class="p-2 font-medium text-blue-600 hover:underline dark:text-blue-500"
+                        >Edit</a
+                    >
+                    <button
+                        v-if="can('roles.delete')"
+                        @click="deleterole(role.id)"
                         class="p-2 font-medium text-red-600 hover:underline dark:text-blue-500"
-                        >Delete</Link
-                    > -->
-                    <button @click="deleterole(role.id)" class="p-2 font-medium text-red-600 hover:underline dark:text-blue-500">Delete</button>
+                    >
+                        Delete
+                    </button>
                 </td>
             </tr>
         </tbody>

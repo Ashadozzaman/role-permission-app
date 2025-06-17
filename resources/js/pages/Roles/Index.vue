@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import { can } from '@/lib/can';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import RolesTable from './RolesTable.vue';
@@ -25,6 +26,7 @@ const roles = usePage().props.roles;
                 </div>
             </div> -->
             <Link
+                v-if="can('roles.create')"
                 :href="route('roles.create')"
                 class="border-sidebar-border/70 dark:border-sidebar-border primary-button absolute top-4 right-2 cursor-pointer self-end rounded-md border px-4 py-2 hover:bg-purple-200"
             >

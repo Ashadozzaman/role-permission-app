@@ -31,7 +31,7 @@ const deleteUser = (id) => {
                 <th scope="col" class="px-6 py-3">Name</th>
                 <th scope="col" class="px-6 py-3">Email</th>
                 <th scope="col" class="px-6 py-3">Role</th>
-                <th scope="col" class="px-6 py-3">Mobile</th>
+                <!-- <th scope="col" class="px-6 py-3">Mobile</th> -->
                 <th scope="col" class="px-6 py-3">Action</th>
             </tr>
         </thead>
@@ -51,7 +51,7 @@ const deleteUser = (id) => {
                         >{{ role.name }}</span
                     >
                 </td>
-                <td class="px-6 py-4">01865432121</td>
+                <!-- <td class="px-6 py-4">01865432121</td> -->
                 <td class="px-6 py-4">
                     <a
                         v-if="can('users.update')"
